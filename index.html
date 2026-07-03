@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PhonePhrase — the party word game where the word jumps to your phone</title>
+  <meta name="description" content="A Catchphrase-style party game for iOS. Everyone plays on their own phone: give clues, pass the word, and don't get caught holding it when the hidden bomb blows. Five modes, AI word packs, no accounts.">
+  <meta property="og:title" content="PhonePhrase — Party Word Game">
+  <meta property="og:description" content="The word jumps to your phone. Guess it before the bomb blows. Five modes, AI word packs, no accounts — just a 4-letter code.">
+  <meta property="og:image" content="https://phonephrase.soudub.com/assets/01-hero.png">
+  <meta property="og:url" content="https://phonephrase.soudub.com">
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:#0E0F1A; --surface:#1A1B2E; --surfaceAlt:#24263D; --border:#2E3050;
+      --text:#F5F6FA; --muted:#9BA0BD; --primary:#FFC542; --primaryText:#1A1300;
+      --accent:#7C5CFF; --coral:#FF6B6B; --teal:#4ECDC4; --danger:#FF5A5F;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background:
+        radial-gradient(900px 600px at -10% -5%, rgba(255,107,107,.20), transparent 60%),
+        radial-gradient(1000px 700px at 110% 30%, rgba(78,205,196,.16), transparent 60%),
+        radial-gradient(800px 800px at 50% 110%, rgba(124,92,255,.14), transparent 65%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    header { padding: 22px 0; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 20px; color: var(--text); text-decoration: none; }
+    .brand img { width: 40px; height: 40px; border-radius: 10px; }
+    nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 15px; margin-left: 22px; }
+    nav a:hover { color: var(--text); }
+    .hero { text-align: center; padding: 64px 0 30px; }
+    .hero img.appicon { width: 108px; height: 108px; border-radius: 26px; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+    h1 { font-size: clamp(38px, 6vw, 62px); font-weight: 800; letter-spacing: -1px; line-height: 1.08; margin: 26px 0 14px; }
+    h1 .coral { color: var(--coral); } h1 .teal { color: var(--teal); }
+    .tagline { font-size: clamp(17px, 2.2vw, 21px); color: var(--muted); max-width: 640px; margin: 0 auto 30px; font-weight: 500; }
+    .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--primary); color: var(--primaryText);
+      font-weight: 800; font-size: 17px; padding: 15px 30px; border-radius: 14px; text-decoration: none; }
+    .cta:hover { filter: brightness(1.06); }
+    .cta-note { display: block; margin-top: 12px; color: var(--muted); font-size: 14px; }
+    .shots { display: flex; gap: 22px; overflow-x: auto; padding: 46px 6px 26px; scroll-snap-type: x mandatory; }
+    .shots img { width: 252px; border-radius: 22px; scroll-snap-align: center; flex-shrink: 0;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45); border: 1px solid var(--border); }
+    section { padding: 56px 0; }
+    h2 { font-size: clamp(26px, 3.6vw, 36px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .sub { color: var(--muted); margin-bottom: 34px; max-width: 620px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+    .card .emoji { font-size: 30px; }
+    .card h3 { font-size: 18px; margin: 10px 0 6px; }
+    .card p { color: var(--muted); font-size: 15px; }
+    .modes .card h3 span { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 99px; margin-left: 8px; vertical-align: 2px; }
+    footer { border-top: 1px solid var(--border); padding: 34px 0 50px; margin-top: 40px;
+      display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between; }
+    footer, footer a { color: var(--muted); font-size: 14.5px; text-decoration: none; }
+    footer a:hover { color: var(--text); }
+    .foot-links a { margin-left: 22px; }
+    @media (max-width: 560px) { nav a { margin-left: 14px; } .foot-links a { margin-left: 0; margin-right: 16px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/"><img src="assets/icon.png" alt="PhonePhrase icon">PhonePhrase</a>
+      <nav>
+        <a href="#modes">Modes</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <img class="appicon" src="assets/icon.png" alt="PhonePhrase app icon">
+      <h1>The word jumps<br>to <span class="coral">your</span> phone</h1>
+      <p class="tagline">A Catchphrase-style party game where everyone plays on their own phone.
+        Give clues, pass the word, and don't get caught holding it when the hidden bomb blows.</p>
+      <a class="cta" href="#" aria-disabled="true">&#63743; Download on the App&nbsp;Store</a>
+      <span class="cta-note">Coming soon — currently in TestFlight.</span>
+    </div>
+
+    <div class="shots">
+      <img src="assets/01-hero.png" alt="Gameplay: the word on screen with the bomb ticking" loading="lazy">
+      <img src="assets/02-boom.png" alt="The bomb goes off and the other team scores" loading="lazy">
+      <img src="assets/03-modes.png" alt="Five game modes including Fishbowl" loading="lazy">
+      <img src="assets/04-taboo.png" alt="Taboo mode with forbidden words" loading="lazy">
+      <img src="assets/05-ai-pack.png" alt="AI-generated word packs from any theme" loading="lazy">
+      <img src="assets/06-lobby.png" alt="Lobby with teams and a 4-letter room code" loading="lazy">
+    </div>
+
+    <section>
+      <h2>Built for real parties</h2>
+      <p class="sub">No app on the TV, no passing one phone around, nothing to sign up for.</p>
+      <div class="grid">
+        <div class="card"><div class="emoji">🔑</div><h3>No accounts. Just a code.</h3>
+          <p>Create a room, share a 4-letter code, and friends are in within seconds — everyone as an instant guest.</p></div>
+        <div class="card"><div class="emoji">💣</div><h3>A bomb you can feel</h3>
+          <p>The hidden timer buzzes faster and harder as it gets close, ending in a full rumble on every phone in the room.</p></div>
+        <div class="card"><div class="emoji">🛡️</div><h3>Cheat-proof by design</h3>
+          <p>The timer lives on the server and only the clue-giver's phone can ever see the word. No peeking.</p></div>
+        <div class="card"><div class="emoji">✨</div><h3>AI word packs</h3>
+          <p>Type any theme — "90s nostalgia", "office life", "pirates" — and play a custom deck seconds later.</p></div>
+        <div class="card"><div class="emoji">🔁</div><h3>Party-proof</h3>
+          <p>Phone died mid-game? Rejoin with one tap. Host left? The game migrates. The party keeps going.</p></div>
+        <div class="card"><div class="emoji">📚</div><h3>12 word packs</h3>
+          <p>From Everyday Things to 90s &amp; 2000s, a Kids pack for family game night — and After Dark for later.</p></div>
+      </div>
+    </section>
+
+    <section id="modes" class="modes">
+      <h2>Five ways to play</h2>
+      <p class="sub">Same room, same code — five very different games.</p>
+      <div class="grid">
+        <div class="card"><div class="emoji">💣</div><h3>Classic</h3>
+          <p>Hot potato with a hidden bomb. Guess it and the word leaps to the other team. Holder at boom loses the point.</p></div>
+        <div class="card"><div class="emoji">🎭</div><h3>Charades</h3>
+          <p>Same bomb, but you act the word out. No talking!</p></div>
+        <div class="card"><div class="emoji">🚫</div><h3>Taboo</h3>
+          <p>Describe the word without saying the forbidden words in red. Harder than it sounds.</p></div>
+        <div class="card"><div class="emoji">⏱️</div><h3>Race</h3>
+          <p>Visible timer, every correct guess scores a point. Pure speed.</p></div>
+        <div class="card"><div class="emoji">🥣</div><h3>Fishbowl</h3>
+          <p>Everyone secretly submits words, then the same deck gets played three ways: describe it, one word only, act it out.</p></div>
+        <div class="card"><div class="emoji">🎲</div><h3>Your rules</h3>
+          <p>Score targets, easy or hard words, skip penalties that burn bomb time, custom team names, shuffle button for drama.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© 2026 Soudub · PhonePhrase</div>
+      <div class="foot-links">
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:contherad@gmail.com">Contact</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
